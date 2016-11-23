@@ -31,4 +31,30 @@ public class Sir {
 	public String getLastName() {
 		return lastName;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		Sir sir = (Sir) o;
+
+		if (firstName != null ? !firstName.equals(sir.firstName) :
+				sir.firstName != null) {
+			return false;
+		}
+		return lastName != null ? lastName.equals(sir.lastName) : sir.lastName == null;
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = firstName != null ? firstName.hashCode() : 0;
+		result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+		return result;
+	}
 }
