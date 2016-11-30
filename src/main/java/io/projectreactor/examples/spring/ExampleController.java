@@ -5,41 +5,37 @@ import io.projectreactor.examples.Sir;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Simon Baslé
  */
-@Controller
+@RestController
 public class ExampleController {
 
 	private final MyReactiveLibrary reactiveLibrary;
 
-	public ExampleController(@Autowired MyReactiveLibrary reactiveLibrary) {
+	//Note Spring Boot 4.3+ autowires single constructors now
+	public ExampleController(MyReactiveLibrary reactiveLibrary) {
 		this.reactiveLibrary = reactiveLibrary;
 	}
 
-	@RequestMapping("hello/{who}")
-	@ResponseBody
+	@GetMapping("hello/{who}")
 	public Mono<String> hello(@PathVariable String who) {
 		return Mono.just(who)
 		           .map(w -> "Hello " + w + "!");
 	}
 
-	@RequestMapping("helloDelay/{who}")
-	@ResponseBody
+	@GetMapping("helloDelay/{who}")
 	public Mono<String> helloDelay(@PathVariable String who) {
 		return reactiveLibrary.withDelay("Hello " + who + "!!", 2);
 	}
 
-	@RequestMapping(value = "heyMister", method = RequestMethod.POST)
-	@ResponseBody
+	@PostMapping("heyMister")
 	public Flux<String> hey(@RequestBody Mono<Sir> body) {
 		return Mono.just("Hey mister ")
 				.concatWith(body

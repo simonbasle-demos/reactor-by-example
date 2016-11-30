@@ -3,28 +3,26 @@ package io.projectreactor.examples.spring;
 import io.projectreactor.examples.Sir;
 import reactor.core.publisher.Mono;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Simon Baslé
  */
-@Controller
+@RestController
 public class DataExampleController {
 
 	private final ReactiveCrudRepository<Sir, String> reactiveRepository;
 
-	public DataExampleController(@Autowired ReactiveCrudRepository<Sir, String> repo) {
+	//Note Spring Boot 4.3+ autowires single constructors now
+	public DataExampleController(ReactiveCrudRepository<Sir, String> repo) {
 		this.reactiveRepository = repo;
 	}
 
-	@RequestMapping("data/{who}")
-	@ResponseBody
+	@GetMapping("data/{who}")
 	public Mono<ResponseEntity<Sir>> hello(@PathVariable String who) {
 		return reactiveRepository.findOne(who)
 		                         .map(ResponseEntity::ok)
