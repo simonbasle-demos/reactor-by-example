@@ -24,7 +24,7 @@ public class MyReactiveLibraryTest {
 	@Test
 	public void testAlphabet5LastItemIsAlphabeticalChar() {
 		MyReactiveLibrary library = new MyReactiveLibrary();
-		StepVerifier.create(library.alphabet5('x'))
+		StepVerifier.create(library.alphabet5('w'))
 		            .consumeNextWith(c -> assertThat(c)
 				            .as("first is alphabetic").matches("[a-z]"))
 		            .consumeNextWith(c -> assertThat(c)

@@ -39,9 +39,9 @@ public class ExampleController {
 	public Flux<String> hey(@RequestBody Mono<Sir> body) {
 		return Mono.just("Hey mister ")
 				.concatWith(body
-						.flatMap(sir -> Flux.fromArray(sir.getLastName().split("")))
+						.flatMap(sir -> Flux.fromArray(sir.getLastName().split(""))
 						.map(String::toUpperCase)
-						.take(1)
+						.elementAt(0))
 				).concatWith(Mono.just(". how are you?"));
 	}
 }

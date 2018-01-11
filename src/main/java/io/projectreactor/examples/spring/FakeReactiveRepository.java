@@ -20,7 +20,7 @@ public class FakeReactiveRepository implements ReactiveCrudRepository<Sir, Strin
 	@Override
 	public Mono<Sir> findOne(String s) {
 		return Mono.just(s)
-		           .then(id -> {
+		           .flatMap(id -> {
 			           if ("notfound".equalsIgnoreCase(s))
 				           return Mono.empty();
 			           else
