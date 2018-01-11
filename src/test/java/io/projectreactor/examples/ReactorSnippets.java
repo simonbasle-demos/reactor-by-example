@@ -1,5 +1,6 @@
 package io.projectreactor.examples;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
@@ -78,14 +79,14 @@ public class ReactorSnippets {
 	@Test
 	public void shortCircuit() {
 		Flux<String> helloPauseWorld = Mono.just("Hello")
-		                                   .concatWith(Mono.just("world").delaySubscriptionMillis(500));
+		                                   .concatWith(Mono.just("world").delaySubscription(Duration.ofMillis(500)));
 		helloPauseWorld.subscribe(System.out::println);
 	}
 
 	@Test
 	public void blocks() {
 		Flux<String> helloPauseWorld = Mono.just("Hello")
-		                                   .concatWith(Mono.just("world").delaySubscriptionMillis(5000));
+		                                   .concatWith(Mono.just("world").delaySubscription(Duration.ofMillis(5000)));
 		helloPauseWorld.toStream()
 		               .forEach(System.out::println);
 	}
@@ -93,11 +94,11 @@ public class ReactorSnippets {
 	@Test
 	public void firstEmitting() {
 		Mono<String> a = Mono.just("oops I'm late")
-		                     .delaySubscriptionMillis(450);
+		                     .delaySubscription(Duration.ofMillis(450));
 		Flux<String> b = Flux.just("let's get", "the party", "started")
-		                     .delayMillis(400);
+		                     .delaySubscription(Duration.ofMillis(400));
 
-		Flux.firstEmitting(a, b)
+		Flux.first(a, b)
 		    .toIterable()
 		    .forEach(System.out::println);
 	}
